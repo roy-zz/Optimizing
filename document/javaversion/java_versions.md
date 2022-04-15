@@ -1,6 +1,6 @@
 이번 장에서는 자바 버전에 따른 변경사항과 트렌드에 대해서 알아본다.
 대부분 기계인간 John Grib과 Oracle 공식문서를 참고하여 작성하였으며 Java 7 이후 버전에 대한 정리만 진행한다.
-주요 변경사항이라고 표시한 부분은 어디까지나 필자의 개인적인 의견일 뿐이며 관점에 따라서 달라질 수 있다.
+주요 변경사항이라고 표시한 부분은 어디까지나 스프링 기반 백엔드 개발자인 필자의 개인적인 의견일 뿐이며 관점에 따라서 달라질 수 있다.
 
 ---
 
@@ -23,8 +23,9 @@
 답변을 들은 면접관은 "자바8에서 변경사항이 많이 있을텐데 다른 건 없나요???"라고 질문하였고 필자는 입을 다물 수 밖에 없었다.
 
 이 글을 읽는 사람들은 필자와 같은 실수를 하지 않았으면 하는 바램으로 변경사항을 정리하며 인터뷰 질문에 대한 답변도 정리하는 시간을 가져보려 한다.
-모든 변경사항을 다루지는 않으며 인터뷰 질문을 대비한 "주요 변경사항"과 보안 및 기타 변경사항에 대해서 알아본다.
-보안(Security)은 내용이 많아 본 글을 작성하고 읽는 목표를 흐릴 수 있으므로 하단부에 따로 정리하는 방식으로 진행한다.
+모든 변경사항을 다루지는 않으며 인터뷰 질문을 대비한 "주요 변경사항"과 JVM 관련 변경사항 및 기타 변경사항에 대해서 알아본다.
+
+보안(Security)관련 업데이트는 내용이 너무 길어져서 추후 따로 정리하도록 한다. 
 
 ---
 
@@ -129,51 +130,38 @@ CMS GC는 Deprecated되었고 기본 GC가 Parallel GC에서 G1GC로 변경되�
 
 ---
 
-### [Java 10]()
+### [Java 10](https://www.oracle.com/java/technologies/javase/10-relnote-issues.html)
+
+#### 주요 변경사항
+
+- **Java9의 안정화 버전**
+- [**Improvements for Docker**](https://bugs.openjdk.java.net/browse/JDK-8146115): 
+  도커 컨테이너에서의 성능 향상, 추가된 flag들은 링크를 통해서 확인
 
 
+#### JVM 관련 변경사항
 
+- [Full GC 병렬처리](https://bugs.openjdk.java.net/browse/JDK-8172890): 
+  G1의 Full GC를 병렬화하여 애플리케이션 지연 시간 단축
+- [Unified Logging](https://bugs.openjdk.java.net/browse/JDK-8184286): 
+  TraceYoungGenTime, TraceOldGenTime flag를 gc+heap+exit flag 하나로 통합
 
+#### 기타 변경사항
 
+- [Optional.orElseThrow() Method 추가](https://bugs.openjdk.java.net/browse/JDK-8140281)
+- [Unmodifiable Collections 추가](https://bugs.openjdk.java.net/browse/JDK-8177290)
+- [Class File Versioning 방식 변경](http://openjdk.java.net/jeps/322)
 
----
+#### 정리
 
-### Security
+Java9의 안정화 버전이라서 그런지 이렇다할 변경사항은 보이지 않지만 도커 컨테이너에서의 성능 향상을 위한 플래그 추가는 만족스럽다.
 
-#### Java 8
+기본 GC인 G1GC의 병렬 처리로 변경하였다. GC가 애플리케이션 스레드를 멈추지 않고 병렬로 처리되면 당연히 리소스 사용량이 높아질 수 밖에 없다.
+혹시 [GC 작동 방식](https://imprint.tistory.com/35) 이 궁금하다면 링크로 이동하여 확인해본다.
+필자가 이전에 작성한 [GC별 벤치마크 자료](https://imprint.tistory.com/51) 를 확인해보면 확실히 G1GC의 리소스 사용량이 높은 것을 확인할 수 있다.
+하드웨어의 성능이 높아지는 추세이다보니 자바에서도 적은 리소스를 사용하는 것보다 할당된 리소스를 충분히 사용하여 빠르게 GC를 수행하는 방향으로 업데이트가 진행되는 것으로 보인다.
 
-- Client-side TLS 1.2 enabled by default
-- New variant of AccessController.doPrivileged that enables code to assert a subset of its privileges, without preventing the full traversal of the stack to check for other permissions
-- Stronger algorithms for password-based encryption
-- SSL/TLS Server Name Indication (SNI) Extension support in JSSE Server
-- Support for AEAD algorithms: The SunJCE provider is enhanced to support AES/GCM/NoPadding cipher implementation as well as GCM algorithm parameters. And the SunJSSE provider is enhanced to support AEAD mode based cipher suites. See Oracle Providers Documentation, JEP 115.
-- KeyStore enhancements, including the new Domain KeyStore type java.security.DomainLoadStoreParameter, and the new command option -importpassword for the keytool utility
-- SHA-224 Message Digests
-- Enhanced Support for NSA Suite B Cryptography
-- Better Support for High Entropy Random Number Generation
-- New java.security.cert.PKIXRevocationChecker class for configuring revocation checking of X.509 certificates
-- 64-bit PKCS11 for Windows
-- New rcache Types in Kerberos 5 Replay Caching
-- Support for Kerberos 5 Protocol Transition and Constrained Delegation
-- Kerberos 5 weak encryption types disabled by default
-- Unbound SASL for the GSS-API/Kerberos 5 mechanism
-- SASL service for multiple host names
-- JNI bridge to native JGSS on Mac OS X
-- Support for stronger strength ephemeral DH keys in the SunJSSE provider
-- Support for server-side cipher suites preference customization in JSSE
-
-#### Java 9
-
-- JEP 219: Datagram Transport Layer Security (DTLS)
-- JEP 244: TLS Application-Layer Protocol Negotiation Extension
-- JEP 249: OCSP Stapling for TLS
-- JEP 246: Leverage CPU Instructions for GHASH and RSA
-- JEP 273: DRBG-Based SecureRandom Implementations
-- JEP 288: Disable SHA-1 Certificates
-- JEP 229: Create PKCS12 Keystores by Default
-- JEP 287: SHA-3 Hash Algorithms
-
-#### Java 10
+Collections final 키워드를 사용해도 내용물이 바뀌는 것을 막을 수 없어서 불편하였는데 Unmodifiable 타입이 추가되어 컬렉션의 내용을 변경하지 못하는 것은 충분히 매력적인 기능이다. 
 
 ---
 
