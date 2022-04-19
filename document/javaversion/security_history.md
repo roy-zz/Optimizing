@@ -1,41 +1,25 @@
+자바 업데이트 이력(8 ~ 17)을 다루면서 보안 관련 부분은 따로 모아두었다.
+추후 시간이 생긴다면 보안 관련하여 어떠한 업데이트가 진행되고 있는지 알아보도록 한다.
+
 ### Security
 
-#### Java 8
-
-- Client-side TLS 1.2 enabled by default
-- New variant of AccessController.doPrivileged that enables code to assert a subset of its privileges, without preventing the full traversal of the stack to check for other permissions
-- Stronger algorithms for password-based encryption
-- SSL/TLS Server Name Indication (SNI) Extension support in JSSE Server
-- Support for AEAD algorithms: The SunJCE provider is enhanced to support AES/GCM/NoPadding cipher implementation as well as GCM algorithm parameters. And the SunJSSE provider is enhanced to support AEAD mode based cipher suites. See Oracle Providers Documentation, JEP 115.
-- KeyStore enhancements, including the new Domain KeyStore type java.security.DomainLoadStoreParameter, and the new command option -importpassword for the keytool utility
-- SHA-224 Message Digests
-- Enhanced Support for NSA Suite B Cryptography
-- Better Support for High Entropy Random Number Generation
-- New java.security.cert.PKIXRevocationChecker class for configuring revocation checking of X.509 certificates
-- 64-bit PKCS11 for Windows
-- New rcache Types in Kerberos 5 Replay Caching
-- Support for Kerberos 5 Protocol Transition and Constrained Delegation
-- Kerberos 5 weak encryption types disabled by default
-- Unbound SASL for the GSS-API/Kerberos 5 mechanism
-- SASL service for multiple host names
-- JNI bridge to native JGSS on Mac OS X
-- Support for stronger strength ephemeral DH keys in the SunJSSE provider
-- Support for server-side cipher suites preference customization in JSSE
+---
 
 #### Java 9
 
-- JEP 219: Datagram Transport Layer Security (DTLS)
-- JEP 244: TLS Application-Layer Protocol Negotiation Extension
-- JEP 249: OCSP Stapling for TLS
-- JEP 246: Leverage CPU Instructions for GHASH and RSA
-- JEP 273: DRBG-Based SecureRandom Implementations
-- JEP 288: Disable SHA-1 Certificates
-- JEP 229: Create PKCS12 Keystores by Default
-- JEP 287: SHA-3 Hash Algorithms
+- JDK-8191486: Open source the root certificates in Oracle's Java SE Root CA program
+- JDK-8148421: Added TLS session hash and extended master secret extension support
+- JDK-8140436: Negotiated Finite Field Diffie-Hellman Ephemeral Parameters for TLS
+- JDK-8174756: RSA public key validation
+- JDK-8178466: Provider default key size is updated
+- JDK-8163237: Stricter key generation
+- JDK-8189131: TLS does not work by default on OpenJDK 9
+- JDK-8181048: Refactor existing providers to refer to the same constants for default values for key length
+- JDK-8182879: Add warnings to keytool when using JKS and JCEKS
 
 #### Java 10
 
-- JEP 319: Root Certificates
+- JDK-8189131: Root Certificates
 - JDK-8148421: TLS Session Hash and Extended Master Secret Extension Support
 - JDK-8186535: Removal of Deprecated Pre-1.2 SecurityManager Methods and Fields
 - JDK-8148371: Removal of policytool
@@ -205,3 +189,24 @@
 - JDK-8243321: Added Entrust Root Certification Authority - G4 certificate
 - JDK-8153005: Upgraded the Default PKCS12 Encryption and MAC Algorithms
 - JDK-8202343: Disable TLS 1.0 and 1.1
+
+#### Java 17
+
+- JDK-8274215: Removed Google's GlobalSign Root Certificate
+- JDK-8225082: Removed IdenTrust Root Certificate
+- JDK-8260693: Provide Support for Specifying a Signer in Keytool -genkeypair Command
+- JDK-8248268: SunJCE Provider Supports KW and KWP Modes With AES Cipher
+- JDK-8240256: New SunPKCS11 configuration properties
+- JDK-8255410: SunPKCS11 Provider Supports ChaCha20-Poly1305 Cipher and ChaCha20 KeyGenerator if Supported by PKCS11 Library
+- JDK-8217633: Configurable Extensions With System Properties
+- JDK-8225081: Removed Telia Company's Sonera Class2 CA Certificate
+- JDK-8264713: Deprecate the Security Manager for Removal
+- JDK-8256421: Added 2 HARICA Root CA Certificates
+- JDK-8196415: Disable SHA-1 JARs
+- JDK-8259801: Enable XML Signature Secure Validation Mode by Default
+- JDK-8259709: Disable SHA-1 XML Signatures
+- JDK-8256895: New System Property Added to Enable the OCSP Nonce Extension
+- JDK-8257497: Updated keytool to Create AKID From SKID of Issuing Certificate as Specified by RFC 5280
+- JDK-8246005: Updated Specifications of KeyStoreSpi.engineStore(KeyStore.LoadStoreParameter) and KeyStore.store(KeyStore.LoadStoreParameter) Methods
+- JDK-8259401: jarsigner Tool Warns if Weak Algorithms Are Used in Signer’s Certificate Chain
+- JDK-8259662: SocketExceptions Are Not Wrapped Into SSLExceptions in SSLSocketImpl

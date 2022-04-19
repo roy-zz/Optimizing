@@ -1,6 +1,6 @@
 이번 장에서는 자바 버전에 따른 변경사항과 트렌드에 대해서 알아본다.
 대부분 기계인간 John Grib과 Oracle 공식문서를 참고하여 작성하였으며 Java 7 이후 버전에 대한 정리만 진행한다.
-주요 변경사항이라고 표시한 부분은 어디까지나 스프링 기반 백엔드 개발자인 필자의 개인적인 의견일 뿐이며 관점에 따라서 달라질 수 있다.
+주요 변경사항이라고 표시한 부분은 어디까지나 스프링 기반 백엔드 개발자인 필자의 개인적인 의견일 뿐~~(예를 들어Swing관련 큰 변화가 있어도 필자에게는 크게 느껴지지 않는다.)~~이며 보는 관점에 따라서 달라질 수 있다.
 
 ---
 
@@ -75,6 +75,8 @@ JVM 메모리 구조에 대한 인터뷰 질문도 많이 나오는데 Java8에�
 Concurrent, Parallel, Stream, CompletableFuture 모두 다중 스레드를 염두한 동시처리 및 병렬처리와 관련이 있다. 
 하드웨어 성능 향상으로 다중 코어 및 다중 스레드에 초점을 맞추어 Java도 발전하고 있는 것을 볼 수 있다.
 
+**Java8 핵심 키워드: 람다 표현식, 함수형 인터페이스, DateTime, Concurrent, Parallel, Stream**
+
 ---
 
 ### [Java 9](https://docs.oracle.com/javase/9/whatsnew/toc.htm#JSNEW-GUID-C23AFD78-C777-460B-8ACE-58BE5EA681F6)
@@ -128,6 +130,8 @@ CMS GC는 Deprecated되었고 기본 GC가 Parallel GC에서 G1GC로 변경되�
 [Modular Run-Time Images(JEP 220)](https://openjdk.java.net/jeps/220)
 [Encapsulate Most Internal APIs(JEP 260)](https://openjdk.java.net/jeps/260)
 
+**자바9 핵심 키워드: Reactive Streams CMS가 Deprecated, Default GC는 G1GC, 업데이트 주기 변경**
+
 ---
 
 ### [Java 10](https://www.oracle.com/java/technologies/javase/10-relnote-issues.html)
@@ -169,6 +173,8 @@ javascript와 같이 var 타입이 추가되었다.
 
 Collections final 키워드를 사용해도 내용물이 바뀌는 것을 막을 수 없어서 불편하였는데 Unmodifiable 타입이 추가되어 컬렉션의 내용을 변경하지 못하는 것은 충분히 매력적인 기능이다. 
 
+**자바10 핵심 키워드: var타입 추가**
+
 ---
 
 ### [Java 11](https://www.oracle.com/java/technologies/javase/11all-relnotes.html)
@@ -177,10 +183,6 @@ Collections final 키워드를 사용해도 내용물이 바뀌는 것을 막을
 #### 주요 변경사항
 
 - **업데이트 주기 변경 이후 첫 LTS 버전**
-- **Remove the Experimental AOT and JIT Compiler in OracleJDK 11u**:
-  [실험적 자바 기반의 JIT 컴파일러 제거](https://openjdk.java.net/jeps/317), [AOT(Ahead-of-Time) 컴파일러 제거](https://openjdk.java.net/jeps/295)
-- [**Turn off AOT by Default and Change Related Flags to Experimental**](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8227439):
-  AOT 컴파일러를 기본적으로 비활성화하고 flag를 통하여 실험적으로 사용 가능하도록 수정
 - [**HTTP Client API표준화**](https://openjdk.java.net/jeps/321):
   Java9에 추가되었고 Java10에 업데이트 된 HTTP 클라이언트 API를 표준화.
 - [**Local-Variable Syntax for Lambda Parameters**](https://openjdk.java.net/jeps/323):
@@ -208,21 +210,26 @@ Collections final 키워드를 사용해도 내용물이 바뀌는 것을 막을
 - Enhanced Support of Proxy Class: 역직렬화 제한 기능 추가(JDK-8236862)
 - Better Serial Filter Handling: 직렬 필터 처리 성능 향상
 - Better HTTP Redirection Support: HTTP Redirection 성능 향상
+- Remove the Experimental AOT and JIT Compiler in OracleJDK 11u:
+  [실험적 자바 기반의 JIT 컴파일러 제거](https://openjdk.java.net/jeps/317), [AOT(Ahead-of-Time) 컴파일러 제거](https://openjdk.java.net/jeps/295)
+- [Turn off AOT by Default and Change Related Flags to Experimental](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8227439):
+  AOT 컴파일러를 기본적으로 비활성화하고 flag를 통하여 실험적으로 사용 가능하도록 수정
 
 #### 정리
-
-이번 업데이트에서 가장 많이 언급된 문구는 Date와 Window인 듯하다. (물론 보안 쪽을 제외하고)
-Window PC와 Window 서버를 사용하지 않는다면 Window 관련 업데이트는 큰 신경을 쓰지 않아도 될 듯하다.
-Date 관련 업데이트도 상당히 많이 있는데 개인적으로 모든 업데이트 사항을 확인할 수는 없으므로 Oracle에서 권장하는 신규 Date 클래스를 사용하면 문제없을 듯 하다.
-
-![](image/new-date-class.png)
-
-Java9에서 JIT 컴파일러와 AOT 컴파일러가 제거되었고 Java11에서 AOT 컴파일러가 실험적으로 사용할 수 있도록 변경되었다. 
 
 var를 람다 표현식에서도 사용가능하다. 10버전에 이어 자바도 동적으로 타입이 지정되도록 업데이트 하는 것으로 보인다.
 
 기존에 밀어주던 G1GC의 업데이트 사항은 없고 신규 실험적 GC인 ZGC가 출시되었다.
-매번 개선이 있었던 G1의 업데이트가 LTS 버전에서 없다는 것이 어떠한 의미인지 다음 업데이트를 지켜봐야한다.
+
+이번 업데이트에서 가장 많이 언급된 문구는 Date와 Window인 듯하다. (물론 중요한 부분은 아니지만)
+Window PC와 Window 서버를 사용하지 않는다면 Window 관련 업데이트는 큰 신경을 쓰지 않아도 될 듯하다.
+Date 관련 업데이트도 상당히 많이 있는데 개인적으로 모든 업데이트 사항을 확인할 필요까지는 없으며 Java8에서 추가된 DateTime 패키지를 사용하면 될 듯하다.
+
+![](image/new-date-class.png)
+
+혹시라도 Java에서 시간관련 업데이트가 지속적으로 이루어지는 이유가 궁금하다면 [Naver D2 기술블로그(링크)](https://d2.naver.com/helloworld/645609) 에서 확인해보도록 한다.
+
+**자바11 핵심 키워드: 람다에서 var사용 가능, ZGC 실험적 출시**
 
 ---
 
@@ -265,6 +272,8 @@ G1성능 향상을 위한 업데이트가 세 개나 이루어졌다. Oracle에�
 애플리케이션 스레드와 동기로 작동하는 Parallel GC의 성능 향상 업데이트도 이루어졌다. (동기 GC중 유일하게 Oracle에서 지속적으로 업데이트를 하는 것으로 보인다.)
 이번 업데이트로 보아 G1의 차기 GC는 ZGC와 Shenandoah GC 중 하나가 될 가능성이 높아보이는데 추후 업데이트를 보면서 누가 이기는지 지속적으로 확인해보면 좋을 듯하다.
 
+**자바12 핵심 키워드: Switch문법 변경, Shenandoah GC 실험적 출시**
+
 ---
 
 ### [Java 13](https://www.oracle.com/java/technologies/javase/13-relnote-issues.html#NewFeature)
@@ -303,7 +312,8 @@ G1성능 향상을 위한 업데이트가 세 개나 이루어졌다. Oracle에�
 multiline String을 위한 텍스트 블록이 드디어 추가되었다.
 ZGC의 성능을 향상시키는 업데이트가 세 개나 진행되었다.
 
-Java 13 버전은 Switch문법 변경과 ZGC의 성능 향상이 주요 포인트다.
+**Java13 핵심 키워드: ZGC의 지속적인 성능 향상**
+(Switch Expression과 Text Blocks는 Preview 버전이기 때문에 핵심 키워드에서는 생략)
 
 ---
 
@@ -365,6 +375,9 @@ Shenandoah GC의 경우 4개의 성능 향상과 1개의 Profiling을 위한 업
 CMS가 제거되면서 Concurrency하게 작동하는 GC는 G1이 유일해졌고 ZGC와 Shenandoah GC가 빠르게 업데이트 되고 있다.
 ZGC와 Shenandoah GC의 경우 아직 Experimental 버전이지만 조만간 정식 버전으로 출시할 가능성이 높아보인다.
 
+**자바14 핵심 키워드: CMS GC 제거, ZGC의 지원 범위 확대, Shenandoah GC 위주의 성능 향상**
+(Records의 경우 Preview이기 때문에 핵심 키워드에서 생략)
+
 ---
 
 ### [Java 15](https://www.oracle.com/java/technologies/javase/15all-relnotes.html)
@@ -409,7 +422,7 @@ ZGC와 Shenandoah GC의 경우 아직 Experimental 버전이지만 조만간 정
 Text Blocks가 정식 출시된 것 이외에 체감될 변경은 없다.
 Experimental 버전에서 많은 업데이트가 이루어지던 ZGC가 드디어 정식으로 추가되었다.
 
-Java 15 버전은 성능 개선이나 신규 기능을 추가하기 보다 모니터링 및 디버깅을 위한 기능들이 많이 추가되었다.
+**Java15 핵심 키워드: Text Blocks 문법의 정식 출시, ZGC 정식 출시, 모니터링 및 디버깅 기능 개선**
 
 ---
 
@@ -452,9 +465,73 @@ Java 15 버전은 성능 개선이나 신규 기능을 추가하기 보다 모�
 
 #### 정리
 
+Records 클래스가 정식으로 자바 문법에 추가되었다.
 
+확실한 경우 타입 캐스팅없이 객체를 사용할 수 있도록 Pattern Matching 기능이 추가되었다.
+다른 언어로 작성된 코드를 호출할 수 있는 기능과 힙 메모리 외부의 메모리에 액세스 할 수 있는 기능이 지속적으로 개발되고 있다.
+두 기능 모두 큰 변화처럼 안보일 수 있지만 비슷한 기능들이 Java16에 이어 Java17에도 업데이트가 진행된다.
+자바에서 관심을 가지고 업데이트를 하는 만큼 우리도 관심을 가지고 지켜볼 필요가 있다.
 
+Sealed Classes가 두번째 Preview 버전을 출시하였다.
 
+**자바16 핵심 키워드: Records 클래스 출시, Pattern Matching**
+
+---
+
+### [Java 17](https://www.oracle.com/java/technologies/javase/17all-relnotes.html)
+
+#### 주요 변경사항
+
+- **Java11 이후 3년 만의 LTS 버전이며 최소 8년 동안 성능, 안정성 및 보안 업데이트가 예정되어 있는 버전.**
+- [**OTN(Oracle Technology Network) 라이선스에서 NFTC(Oracle No-Fee Terms and Conditions)로 라이선스 변경**](https://www.oracle.com/java/technologies/javase/jdk-faqs.html)
+- [**Sealed Classes**](https://bugs.openjdk.java.net/browse/JDK-8260514):
+  Preview였던 Sealed 클래스와 인터페이스가 자바 언어에 추가.
+- [**Pattern Matching for switch (Preview)**](https://bugs.openjdk.java.net/browse/JDK-8213076):
+  switch문에서 인스턴스 타입으로 조건이 통과하는 경우 타입 캐스팅 없이 사용 가능.
+
+#### JVM 변경 사항
+
+- [ZGC: Fixed long Process Non-Strong References times](https://bugs.openjdk.java.net/browse/JDK-8277212):
+  Non-Strong References에 대한 동시 프로세스 오류 수정. 성능 개선
+- [Deprecate JVM TL Heap functions 1.0](https://bugs.openjdk.java.net/browse/JDK-8268241)
+- [Parallel GC Enabled Adaptive Parallel Reference Processing by Default](https://bugs.openjdk.java.net/browse/JDK-8204686):
+  Parallel GC가 GC에 사용할 스레드의 수 설정 로직 최적화
+
+#### 기타 변경사항
+
+- [Foreign Function & Memory API (Incubator)](https://bugs.openjdk.java.net/browse/JDK-8265033):
+  Java16에서 JVM 외부 메모리에 접근 가능한 API가 3번째 Incubator 버전으로 출시하였다. 
+  Java17 버전에서는 JVM 외부 함수와 메모리에 접근 가능한 API가 Incubator 버전으로 출시되었다. 
+- [Experimental Compiler Blackholes Support](https://bugs.openjdk.java.net/browse/JDK-8259316):
+  컴파일러 블랙홀에 대한 실험 지원이 추가.
+- [New Class Hierarchy Analysis Implementation in the HotSpot JVM](https://bugs.openjdk.java.net/browse/JDK-8266074):
+  JIT 컴파일러에 의한 인라인 결정을 개선하는 향샹된 처리기능을 제공.
+- [Strongly Encapsulate JDK Internals](https://bugs.openjdk.java.net/browse/JDK-8266074):
+  JDK의 대부분의 내부 요소를 강력하게 캡슐화.
+- [Remove the Experimental AOT and JIT Compiler](https://bugs.openjdk.java.net/browse/JDK-8263327):
+  실험적 AOT, JIT 컴파일러 제거
+- [TreeMap.computeIfAbsent Mishandles Existing Entries Whose Values Are null](https://bugs.openjdk.java.net/browse/JDK-8259622):
+  TreeMap의 computeIfAbsent 메서드가 null을 잘못처리하던 문제 해결
+
+#### 정리
+
+오라클에서 자바의 라이선스를 OTN에서 NFTC로 변경하였다.
+NFTC(Oracle No-Fee Terms and Conditions)의 경우 OTN과 다르게 사용 용도 및 배포에 있어 제약 조건이 있던 OTN 라이선스와는 다르다.
+상업 및 프로덕션 용도를 포함하여 모든 사용자들에게 무료로 사용 및 배포를 허용한다.
+
+Sealed Classes가 정식적으로 자바 문법에 추가되었다.
+
+Java16에 이어 switch 문에서 Pattern Matching을 통해 타입 캐스팅 없이 객체를 사용할 수 있도록 Preview 버전이 출시되었다.
+
+**자바17 핵심 키워드: 라이선스의 변경, Sealed Classes, Pattern Matching**
+
+---
+
+### 간단 정리
+
+지금까지 자바8에서 자바17까지 업데이트 사항에 대해서 알아보았다.
+정리하고 보니 생각보다 너무 많은 양을 작성하게 된 듯하다.
+평소에 잊지 않도록 주기적으로 정리하고 인터뷰 전에 주요 변경사항과 핵심 키워드 정도만 읽고 들어가도 충분할 듯 하다.
 
 ---
 
@@ -467,7 +544,6 @@ Java 15 버전은 성능 개선이나 신규 기능을 추가하기 보다 모�
 - [Shenandoah GC - 1](https://developers.redhat.com/blog/2020/03/04/shenandoah-gc-in-jdk-14-part-1-self-fixing-barriers#self_fixing_barriers)
 - [Shenandoah GC - 2](https://developers.redhat.com/blog/2020/03/09/shenandoah-gc-in-jdk-14-part-2-concurrent-roots-and-class-unloading#)
 - 
-
 
 **용어정리**
 
