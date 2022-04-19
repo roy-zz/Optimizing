@@ -137,6 +137,8 @@ CMS GC는 Deprecated되었고 기본 GC가 Parallel GC에서 G1GC로 변경되�
 - **Java9의 안정화 버전**
 - [**Improvements for Docker**](https://bugs.openjdk.java.net/browse/JDK-8146115): 
   도커 컨테이너에서의 성능 향상, 추가된 flag들은 링크를 통해서 확인
+- [**Local-Variable Type Inference**](https://openjdk.java.net/jeps/286):
+  지역 변수 선언에 대한 var 타입 사용으로 유형 추론 가능.
 
 
 #### JVM 관련 변경사항
@@ -161,7 +163,298 @@ Java9의 안정화 버전이라서 그런지 이렇다할 변경사항은 보이
 필자가 이전에 작성한 [GC별 벤치마크 자료](https://imprint.tistory.com/51) 를 확인해보면 확실히 G1GC의 리소스 사용량이 높은 것을 확인할 수 있다.
 하드웨어의 성능이 높아지는 추세이다보니 자바에서도 적은 리소스를 사용하는 것보다 할당된 리소스를 충분히 사용하여 빠르게 GC를 수행하는 방향으로 업데이트가 진행되는 것으로 보인다.
 
+javascript와 같이 var 타입이 추가되었다. 
+문서에 따르면 정확한 타입을 지정하는 것을 개발자들이 불편해하였고, C++, C#, Scala, Go는 이미 데이터 타입을 동적으로 지정하는 것이 가능했다고 얘기하고 있다.
+컴파일러가 타입을 효과적으로 지정해주어 개발자들의 편의를 높여준다는 취지인데 이는 추후 업데이트 사항을 지켜보면서 쓸만한 기능인지 확인해봐야 할 듯하다.
+
 Collections final 키워드를 사용해도 내용물이 바뀌는 것을 막을 수 없어서 불편하였는데 Unmodifiable 타입이 추가되어 컬렉션의 내용을 변경하지 못하는 것은 충분히 매력적인 기능이다. 
+
+---
+
+### [Java 11](https://www.oracle.com/java/technologies/javase/11all-relnotes.html)
+추가 참고: https://openjdk.java.net/projects/jdk/11/
+
+#### 주요 변경사항
+
+- **업데이트 주기 변경 이후 첫 LTS 버전**
+- **Remove the Experimental AOT and JIT Compiler in OracleJDK 11u**:
+  [실험적 자바 기반의 JIT 컴파일러 제거](https://openjdk.java.net/jeps/317), [AOT(Ahead-of-Time) 컴파일러 제거](https://openjdk.java.net/jeps/295)
+- [**Turn off AOT by Default and Change Related Flags to Experimental**](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8227439):
+  AOT 컴파일러를 기본적으로 비활성화하고 flag를 통하여 실험적으로 사용 가능하도록 수정
+- [**HTTP Client API표준화**](https://openjdk.java.net/jeps/321):
+  Java9에 추가되었고 Java10에 업데이트 된 HTTP 클라이언트 API를 표준화.
+- [**Local-Variable Syntax for Lambda Parameters**](https://openjdk.java.net/jeps/323):
+  Java10에 추가된 var를 람다 표현식에서도 사용가능하도록 지원.
+
+#### JVM 관련 변경사항
+
+- [A No-Op Garbage Collector](https://openjdk.java.net/jeps/318):
+  Garbage Collecting을 수행하지 않는 GC 출시. 더 이상 사용 가능한 Heap이 없는 경우 JVM 종료.
+- [Low-Overhead Heap Profiling](https://openjdk.java.net/jeps/331):
+  JVMTI를 통해 적은 오버헤드로 JVM의 힙 정보를 얻을 수 있는 방법 제공.
+- [ZGC: A Scalable Low-Latency Garbage Collector](https://openjdk.java.net/jeps/333):
+  신규 실험적(Experimental) GC인 ZGC 추가
+
+#### 기타 변경사항
+
+- [Release Doesn't Correctly Recognize Windows 11](https://bugs.openjdk.java.net/browse/JDK-8274840)
+- [Release Doesn't Correctly Recognize Windows Server 2022](https://bugs.openjdk.java.net/browse/JDK-8273229)
+- [Windows 2019 Core Server Is Not Supported](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8229800)
+- [JDK time-zone data upgraded to tzdata2020c](https://mm.icann.org/pipermail/tz-announce/2020-October/000060.html)
+- [US/Pacific-New Zone Name Removed as Part of tzdata2020b](https://mm.icann.org/pipermail/tz-announce/2020-October/000059.html)
+- [Update Timezone Data to 2021c](https://bugs.openjdk.java.net/browse/JDK-8274407)
+- [IANA Data 2020](https://www.oracle.com/java/technologies/tzdata-versions.html)
+- [Localized Time Zone Name Inconsistency Between English and Other Locales](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8236548)
+- Enhanced Support of Proxy Class: 역직렬화 제한 기능 추가(JDK-8236862)
+- Better Serial Filter Handling: 직렬 필터 처리 성능 향상
+- Better HTTP Redirection Support: HTTP Redirection 성능 향상
+
+#### 정리
+
+이번 업데이트에서 가장 많이 언급된 문구는 Date와 Window인 듯하다. (물론 보안 쪽을 제외하고)
+Window PC와 Window 서버를 사용하지 않는다면 Window 관련 업데이트는 큰 신경을 쓰지 않아도 될 듯하다.
+Date 관련 업데이트도 상당히 많이 있는데 개인적으로 모든 업데이트 사항을 확인할 수는 없으므로 Oracle에서 권장하는 신규 Date 클래스를 사용하면 문제없을 듯 하다.
+
+![](image/new-date-class.png)
+
+Java9에서 JIT 컴파일러와 AOT 컴파일러가 제거되었고 Java11에서 AOT 컴파일러가 실험적으로 사용할 수 있도록 변경되었다. 
+
+var를 람다 표현식에서도 사용가능하다. 10버전에 이어 자바도 동적으로 타입이 지정되도록 업데이트 하는 것으로 보인다.
+
+기존에 밀어주던 G1GC의 업데이트 사항은 없고 신규 실험적 GC인 ZGC가 출시되었다.
+매번 개선이 있었던 G1의 업데이트가 LTS 버전에서 없다는 것이 어떠한 의미인지 다음 업데이트를 지켜봐야한다.
+
+---
+
+### [Java 12](https://www.oracle.com/java/technologies/javase/12all-relnotes.html)
+추가 참고: https://openjdk.java.net/projects/jdk/12/
+
+#### 주요 변경사항
+
+- [**Switch Expressions(Preview)**](https://openjdk.java.net/jeps/325):
+  Switch 문법 Kotlin과 유사하게 변경됨.
+
+#### JVM 관련 변경사항
+
+- [ZGC Concurrent Class Unloading](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8214897):
+  사용하지 않는 클래스 언로드를 통한 애플리케이션 전체 공간을 낮추는 효과를 가져온다. 성능 향상
+- [Allocation of Old Generation of Java Heap on Alternate Memory Devices](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8202286):
+  G1, Parallel GC가 실험적 기능을 통해 NV-DIMM 메모리와 같은 대체 메모리 장치에 이전 세대의 Java Heap을 할당할 수 있다. 신규 OS 대응
+- [G1 May Uncommit Memory During Marking Cycle](https://www.oracle.com/java/technologies/javase/12all-relnotes.html)
+  G1이 Marking Cycle동안 사용하지 않는 메모리를 해제할 수 있도록 변경. 성능 향상 
+- [Shenandoah: A Low-Pause-Time GC](https://openjdk.java.net/jeps/189):
+  실험적 버전인 Shenandoah GC가 추가되었다.
+- [JVM Constant API](https://openjdk.java.net/jeps/334):
+  클래스 파일 및 런타임 아티팩트, 상수 풀을 조회할 수 있는 API 추가
+- [Abortable Mixed Collections for G1](https://openjdk.java.net/jeps/344):
+  설정한 최대 중지 시간을 초과하는 경우 G1이 혼합 컬렉션을 중단할 수 있도록 수정. 성능 향상
+
+#### 기타 변경사항
+
+- [Microbenchmark Suite](https://openjdk.java.net/jeps/230):
+  효율적인 마이크로벤치마크를 위해 JDK에 새로운 제품군 추가.
+- Better HTTP Redirection Support: HTTP Redirection 성능 향상
+- [Default CDS Archives](https://openjdk.java.net/jeps/341)
+
+#### 정리
+
+우리가 체감할 수 있을 만한 변경사항은 Switch문의 변경이다. Kotlin과 비슷하게 변경되었다는 점이 주목할 만하다.
+
+JVM 관련 업데이트가 상당히 많이 보인다. Java 11에서 ZGC가 추가된 것에 이어 다음 버전인 Java 12에서 새로운 GC인 Shenandoah GC가 실험적 버전으로 출시되었다.
+G1성능 향상을 위한 업데이트가 세 개나 이루어졌다. Oracle에서 G1을 확실히 밀어주고 있는 것으로 보인다.
+애플리케이션 스레드와 동기로 작동하는 Parallel GC의 성능 향상 업데이트도 이루어졌다. (동기 GC중 유일하게 Oracle에서 지속적으로 업데이트를 하는 것으로 보인다.)
+이번 업데이트로 보아 G1의 차기 GC는 ZGC와 Shenandoah GC 중 하나가 될 가능성이 높아보이는데 추후 업데이트를 보면서 누가 이기는지 지속적으로 확인해보면 좋을 듯하다.
+
+---
+
+### [Java 13](https://www.oracle.com/java/technologies/javase/13-relnote-issues.html#NewFeature)
+
+#### 주요 변경사항
+
+- [**Switch Expressions(Preview)**](https://www.oracle.com/java/technologies/javase/13-relnote-issues.html#NewFeature):
+  break with value와 같이 사용하던 형식 제거. yield 추가.
+- [**Text Blocks(Preview)**](https://openjdk.java.net/jeps/355):
+  multiline 문자열을 위한 텍스트 블록 추가.
+
+#### JVM 관련 변경사항
+
+- [ZGC Uncommit Unused Memory](https://openjdk.java.net/jeps/351):
+  ZGC가 사용하지 않는 메모리를 반납하도록 개선. 성능 향상
+- [-XXSoftMaxHeapSize Flag](https://www.oracle.com/java/technologies/javase/13-relnote-issues.html#NewFeature):
+  OOM의 발생을 피하기 위해 ZGC가 동적으로 늘리는 HeapSize를 제한
+- [ZGC Maximum Heap Size Increased to 16TB](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8221786):
+  ZGC의 최대 힙사이즈를 16TB로 상향 조절
+- [Improvements in Serial GC Young pause time report](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8215221):
+  혼동을 야기할 수 있는 로깅 메시지 변경. 성능 향상 X
+- [Improve the Behavior of MaxRAM Settings and UseCompressedOops](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8222252):
+  사용 가능한 메모리를 백분율 또는 비율로 계산하여 GC 힙 선택 플래그의 동작이 사용자의 기대에 부합하도록 개선.
+
+#### 기타 변경사항
+
+- [Dynamic CDS Archives](https://openjdk.java.net/jeps/350)
+- [Removal of Old Features from javadoc Tool](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8215608):
+  구버전 Javadoc 툴 제거
+- [StringBuffer, StringBuilder Exception 구체화](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8218228):
+  StringBuffer, StringBuilder의 길이를 음수로 하였을 때 발생하던 IndexOutOfBoundException을 NegativeArraySizeException으로 변경.
+
+#### 정리
+
+주요 변경사항은 12버전에 이어 Switch문이 개선되었다. 아직 Preview 버전인 것을 보아 다음 버전까지 지켜보아야한다.
+multiline String을 위한 텍스트 블록이 드디어 추가되었다.
+ZGC의 성능을 향상시키는 업데이트가 세 개나 진행되었다.
+
+Java 13 버전은 Switch문법 변경과 ZGC의 성능 향상이 주요 포인트다.
+
+---
+
+### [Java 14](https://www.oracle.com/java/technologies/javase/14all-relnotes.html)
+
+#### 주요 변경사항
+
+- [**Records(Preview)**](https://www.oracle.com/java/technologies/javase/14all-relnotes.html):
+  신규 클래스인 Records 추가
+- [**Thread Suspend/Resume Are Deprecated**](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8231602):
+  Thread 일부 메서드 삭제를 위한 Deprecated 처리
+- [**Detailed Message in NullPointerExceptions**](https://www.oracle.com/java/technologies/javase/14all-relnotes.html):
+  -XX:+ShowCodeDetailsInExceptionMessages 플래그를 활성화하여 NPE가 발생하였을 때 getMessage()를 호출하여 상세 메시지 확인 가능.
+
+#### JVM 관련 변경사항
+
+- [ZGC on Windows](https://openjdk.java.net/jeps/365):
+  ZGC를 Windows OS에서도 사용할 수 있도록 개선
+- [ZGC on macOS](https://openjdk.java.net/jeps/364):
+  ZGC를 macOS에서도 사용할 수 있도록 개선
+- [Parallel GC Improvements](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8224666):
+  Parallel GC도 예약 병렬 작업을 처리하기 위해 다른 GC와 동일한 메커니즘을 채택. 성능 향상
+- [NUMA-Aware Memory Allocation for G1](https://openjdk.java.net/jeps/345):
+  G1이 NUMA 노드에 객체를 할당하고 유지한다. 이는 Parallel GC와 유사하다. 성능 향상
+- [Remove the CMS GC](https://openjdk.java.net/jeps/363):
+  메모리 단편화 문제를 해결하지 못한 CMS가 결국 제거되었다.
+- [Deprecate the ParallelScavenge + SerialOld GC Combination](https://openjdk.java.net/jeps/366)
+- [Shenandoah self-fixing barriers](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8231087)
+- [Epsilon warns about Xms/Xmx/AlwaysPreTouch configuration](https://www.oracle.com/java/technologies/javase/14all-relnotes.html):
+  Epsilon GC(No-Op GC)에서 특정 플래그 설정시 warn 발생
+- [Shenandoah asynchronous object/region pinning](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8232575):
+  Get*Critical 메서드를 처리할 때 GCLocker 대신 객체/영역 고정하도록 변경. 병목 현상을 해결. 성능 향상
+- [Shenandoah supports concurrent class unloading](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8226241):
+  동시 클래스 언로딩 지원. 성능 향상
+- [Shenandoah arraycopy improvements](https://www.oracle.com/java/technologies/javase/14all-relnotes.html):
+  GC API 개선된 JDK 14에서 arraycopy 성능 향상.
+- [Shenandoah supports JFR Leak Profiler](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8235685):
+  JFR Leak Profiler를 통한 Memory Leak 분석 가능.
+  
+
+#### 기타 변경사항
+
+- Better Listing of Arrays
+- Improved Serialization Handling
+- Turned Off AOT by Default and Changed Related Flags to Experimental
+
+#### 정리
+
+가장 큰 체감이 되는 부분은 Kotlin의 Data 클래스와 같은 역할을 하는 Records 클래스가 추가되었다는 점이다. (물론 아직은 Preview)
+NPE 상세 메시지를 확인 가능하다는 점도 충분히 매력적인 업데이트처럼 보인다. 
+(-XX:+ShowCodeDetailsInExceptionMessages의 기본값을 활성화로 해주면 좋았을텐데 비활성화가 기본값이다.)
+
+JVM 관련 업데이트 사항이 매우 많다.
+
+단편화 문제를 해결하지 못한 CMS가 결국 삭제되었다.
+ZGC의 성능 향상은 없고 G1GC의 단 하나의 성능 향상 업데이트가 있었다.
+Shenandoah GC의 경우 4개의 성능 향상과 1개의 Profiling을 위한 업데이트가 진행되었다.
+
+CMS가 제거되면서 Concurrency하게 작동하는 GC는 G1이 유일해졌고 ZGC와 Shenandoah GC가 빠르게 업데이트 되고 있다.
+ZGC와 Shenandoah GC의 경우 아직 Experimental 버전이지만 조만간 정식 버전으로 출시할 가능성이 높아보인다.
+
+---
+
+### [Java 15](https://www.oracle.com/java/technologies/javase/15all-relnotes.html)
+
+#### 주요 변경사항
+
+- [**Text Blocks**](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8236934):
+  Preview였던 Text Blocks 정식 출시
+
+#### JVM 관련 변경사항
+
+- [New Option Added to jcmd for Writing a gzipped Heap Dump](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8237354):
+  Heap Dump를 생성할 때 gzip 압축을 활성화할 수 있는 옵션 제공
+- [Obsolete -XXUseAdaptiveGCBoundary](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8228991):
+  ParallelGC와 함께 사용하면 일부 응용프로그램에서 성능의 이점을 가질 수 있지만 여러 단점으로 비활성화되어 있던 옵션 제거.
+- [Improved Ergonomics for G1 Heap Region Size](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8241670):
+  기본 힙 영역 크기 계산이 기본적으로 더 큰 영역을 반환하도록 변경. 성능 향상.
+- [ZGC A Scalable Low-Latency Garbage Collector(Production)](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8209683):
+  ZGC가 정식 출시되었으며 더 이상 -XX:+UnlockExperimentalVMOptions 옵션 필요없이 사용 가능.
+
+#### 기타 변경사항
+
+- [Added isEmpty Default Method to CharSequence](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8215401):
+  CharSequence에 isEmpty 메서드 추가
+- [Hidden Classes](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8238358):
+  Class::getName 메서드에 일반적인 이진 이름을 반환하지 않는 숨겨진 클래스 추가
+- [Specialized Implementations of TreeMap Methods](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8227666):
+  TreeMap 클래스에 putIfAbsent와 같은 신규 메서드 추가
+- [Added Ability to Configure Third Port for Remote JMX](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8234484):
+  속성을 설정하여 두 개의 포트를 통해 원격 네트워크 액세스 지원
+- [New Option Added to jstatd for Specifying RMI Connector Port Number](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8196729):
+  RMI 포트 번호 지정을 위한 jstatd의 새로운 옵션 추가
+- [New Options Added to jhsdb for debugd Mode](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8196751):
+  jhsdb 디버그 모드에 새로운 세 가지 옵션 추가
+- [Flags Controlling C1 Inlining Have New Names](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8235673): 
+  C1과 C2에서 동시에 사용하던 플래그가 분리되고 기존의 플래그는 C2에만 적용된다.
+- [Pattern Matching for instanceof(Second Preview)](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8235186):
+  Java 14에 이어 instanceof의 성능 향상 두 번째 Preview 버전이 출시.
+
+#### 정리
+
+Text Blocks가 정식 출시된 것 이외에 체감될 변경은 없다.
+Experimental 버전에서 많은 업데이트가 이루어지던 ZGC가 드디어 정식으로 추가되었다.
+
+Java 15 버전은 성능 개선이나 신규 기능을 추가하기 보다 모니터링 및 디버깅을 위한 기능들이 많이 추가되었다.
+
+---
+
+### [Java 16](https://www.oracle.com/java/technologies/javase/16all-relnotes.html)
+
+#### 주요 변경사항
+
+- [**Day Period Support Added to java.time Formats**](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8247781):
+  java.time에 요일 형식을 지원하도록 수정
+- [**Add Stream.toList() Method**](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8180352):
+  Stream에 toList() 메서드가 추가되어 더 이상 Collectors.toList()와 같이 사용하지 않아도 된다.
+- [**Records**](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8246771):
+  Records가 정식적으로 Java언어에 추가되었다.
+- [**Pattern Matching for instanceof**](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8250623):
+  instanceof를 사용하는 경우 타입 캐스팅 없이 사용할 수 있도록 변경.
+
+#### JVM 관련 변경사항
+
+- [ZGC Concurrent Stack Processing](https://www.oracle.com/java/technologies/javase/16all-relnotes.html):
+  ZGC가 Thread Stack을 safepoint에서 Concurrency 단계로 이동하여 Stop The World 시간없이 처리하도록 성능 향상.
+- [Concurrently Uncommit Memory in G1](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8236926):
+  OS에 메모리를 반납하고 힙을 축소하는 것은 많이 시간이 소요되는데 이러한 작업을 Concurrently하게 처리하여 성능 향상.
+
+#### 기타 변경사항
+
+- [Foreign Linker API (Incubator)](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8249755):
+  C 또는 C++과 같이 다른 언어로 작성된 코드를 호출할 수 있는 기능 추가(Incubator 단계이며 기존의 NI를 대체한다.)
+- [Strongly Encapsulate JDK Internals by Default](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8256299):
+  타사 라이브러리, 프레임워크가 JDK의 내부 API 및 패키지를 사용하지 못하도록 캡슐화
+- [Foreign-Memory Access API (Third Incubator)](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8253415):
+  Java Heap 외부의 메모리에 액세스할 수 있는 API 세번째 Incubator 버전 출시
+- [Vector API (Incubator)](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8201271):
+  JEP는 개발자가 벡터 작업을 명시적으로 수행할 수 있또록 새로운 벡터 API를 도입
+- [Warnings for Value-based Classes](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8249100):
+  @ValueBased 애노테이션이 사용된 객체에 synchronized가 사용되는 경우 warning 메시지 발생
+- [Sealed Classes(Second Preview)](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8246775):
+  Java 15에 이어 봉인된 클래스 두번째 Preview 버전 출시.
+- [Terminally Deprecated ThreadGroup stop, destroy, isDestroyed, setDaemon, isDaemon](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8256643):
+  ThreadGroup 특정 메서드 Deprecated 처리
+
+#### 정리
+
+
+
+
 
 ---
 
@@ -170,3 +463,12 @@ Collections final 키워드를 사용해도 내용물이 바뀌는 것을 막을
 - [람다의 개념 및 사용법](https://khj93.tistory.com/entry/JAVA-%EB%9E%8C%EB%8B%A4%EC%8B%9DRambda%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B4%EA%B3%A0-%EC%82%AC%EC%9A%A9%EB%B2%95)
 - [Java8 함수형 인터페이스](https://bcp0109.tistory.com/313)
 - [Java8 함수형 인터페이스 이해하기](https://codechacha.com/ko/java8-functional-interface/)
+- [NUMA란?](https://wogh8732.tistory.com/399)
+- [Shenandoah GC - 1](https://developers.redhat.com/blog/2020/03/04/shenandoah-gc-in-jdk-14-part-1-self-fixing-barriers#self_fixing_barriers)
+- [Shenandoah GC - 2](https://developers.redhat.com/blog/2020/03/09/shenandoah-gc-in-jdk-14-part-2-concurrent-roots-and-class-unloading#)
+- 
+
+
+**용어정리**
+
+- LTS(Long Term Support): 장기 지원 버전으로 일반적인 경우보다 장기간에 걸쳐 지원하도록 특별히 고안된 소프트웨어의 버전.
